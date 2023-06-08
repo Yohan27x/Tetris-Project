@@ -11,6 +11,7 @@
 # UML : 
 # diagramme de classe
 
+from settings import *
 from tetromino import *
 from tetris import *
 
@@ -28,27 +29,22 @@ os.environ['SDL_VIDEODRIVER'] = 'directx'
 
 flags = pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.SCALED
 
-screen = pygame.display.set_mode((700,750), flags, vsync=True)
+screen = pygame.display.set_mode((WIDTH, HEIGHT), flags, vsync=True)
 
 clock = pygame.time.Clock()
 
 
 tetris = Tetris(screen)
+tetronimo = Tetromino(tetris)
 
-sprite_group = pygame.sprite.Group()
-block1 =  Block()
-
-sprite_group.add(block1)
 
 while True :
 
-    screen.fill((200, 50, 150,))
+    screen.fill((BG_COLOR))
 
     tetris.draw_grid()
 
-    sprite_group.draw(screen)
-
-    pygame.draw.rect(screen, (0, 100, 255), (50, 50, 162, 100), 1)
+    tetris.draw()
 
     for event in pygame.event.get():  # event loop
         if event.type == QUIT:

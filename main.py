@@ -12,6 +12,7 @@
 # diagramme de classe
 
 from tetromino import *
+from tetris import *
 
 
 import pygame, sys, os, random
@@ -31,11 +32,23 @@ screen = pygame.display.set_mode((700,750), flags, vsync=True)
 
 clock = pygame.time.Clock()
 
+
+tetris = Tetris(screen)
+
+sprite_group = pygame.sprite.Group()
 block1 =  Block()
+
+sprite_group.add(block1)
 
 while True :
 
-    screen.fill((0, 0, 0,))
+    screen.fill((200, 50, 150,))
+
+    tetris.draw_grid()
+
+    sprite_group.draw(screen)
+
+    pygame.draw.rect(screen, (0, 100, 255), (50, 50, 162, 100), 1)
 
     for event in pygame.event.get():  # event loop
         if event.type == QUIT:

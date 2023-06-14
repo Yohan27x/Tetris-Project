@@ -15,6 +15,10 @@ class Tetris:
         elif (event.key == pygame.K_RIGHT):
             self.tetromino.move(direction = "right")
 
+    def check_tetromino_landing(self):
+        if self.tetromino.landing:
+            self.tetromino = Tetromino(self)
+
     def draw_grid(self):
         for x in range(FIELD_W):
             for y in range(FIELD_H):
@@ -23,7 +27,9 @@ class Tetris:
                 
     
     def update(self):
-        self.tetromino.update()
+        if self.app.anim_trigger:
+            self.tetromino.update()
+            self.check_tetromino_landing()
         self.sprite_group.update()
 
     def draw(self):

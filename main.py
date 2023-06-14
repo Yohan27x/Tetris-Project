@@ -1,7 +1,7 @@
 # Tetris Project
+import pygame as pygame
 
-
-# Utiliser https://pyga.me/docs/ 
+# Utiliser https://pyga.me/docs/
 
 # UML : 
 # diagramme de classe
@@ -33,18 +33,22 @@ class App:
         self.tetris.update()
         self.clock.tick(FPS)
 
+
     def draw(self):
         self.screen.fill((BG_COLOR))
         self.tetris.draw()
         pygame.display.update()
 
     def check_events(self):
+        self.anim_trigger = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self.tetris.control(event)
+            elif event.type == self.user_event:
+                self.anim_trigger = True
 
     def run(self):
         while True:
@@ -56,6 +60,10 @@ class App:
 if __name__ == '__main__':
     app = App()
     app.run()
+
+
+
+
 
         
 # pygame.init()

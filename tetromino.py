@@ -22,22 +22,40 @@ class Block(pygame.sprite.Sprite):
         self.set_rect_pos()
 
     # def draw(self):
+    def is_collide(self,pos):
+        x, y = int(pos.x), int(pos.y)
+        if x < 0 or x > FIELD_W - 1 or y > FIELD_H - 1:
+            return True
+        return False
+
 
 
 class Tetromino:
     def __init__(self, tetris):
         self.tetris = tetris
         self.shape = random.choice(list(TETROMINOES.keys()))
-        self.blocks = [Block(self,pos) for pos in TETROMINOES[self.shape]]
+        self.landing = False
+        self.blocks = [Block(self, pos) for pos in TETROMINOES[self.shape]]
+
 
     def move(self, direction):
         move_directions = MOVE_DIRECTIONS[direction]
+        new_block_pos = [block.pos + move_directions for block in self.blocks]
+        is_collide = self.is_collide(new_block_pos)
+
         # print(move_directions)
-        for block in self.blocks:
-            block.pos += move_directions
+        if not is_collide:
+            for block in self.blocks:
+                block.pos += move_directions
+        elif direction == 'down':
+            self.landing = True
+
+
+    def is_collide(self, block_pos):
+        return any(map(Block.is_collide, self.blocks, block_pos))
 
 
     def update(self):
         self.move(direction = "down")
-        pygame.time.wait(200)
+
 

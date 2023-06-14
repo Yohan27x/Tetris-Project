@@ -1,6 +1,16 @@
 import pygame, sys, os, random
 from pygame.locals import *
 
+pygame.init()
+pygame.mixer.init()
+pygame.font.init()
+pygame.mixer.pre_init(44100, -16, 2, 512)
+pygame.mixer.set_num_channels(64)
+pygame.display.set_caption('Tetris')
+font = pygame.font.Font("font/8-BIT WONDER.TTF")
+os.environ['SDL_VIDEODRIVER'] = 'directx'
+flags = pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.SCALED
+
 BG_COLOR = (0,0,0)
 FPS = 60
 

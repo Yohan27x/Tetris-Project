@@ -29,6 +29,8 @@ class Tetris:
     def update(self):
         if self.app.anim_trigger:
             self.tetromino.update()
+            # for block in self.tetromino.blocks:
+            #     print(block.pos)
             self.check_tetromino_landing()
         self.sprite_group.update()
 

@@ -24,9 +24,9 @@ class Block(pygame.sprite.Sprite):
     # def draw(self):
     def is_collide(self,pos):
         x, y = int(pos.x), int(pos.y)
-        if x < 0 or x > FIELD_W - 1 or y > FIELD_H - 1:
-            return True
-        return False
+        if 0 <= x < FIELD_W and y < FIELD_H:
+            return False
+        return True
 
 
 
@@ -41,6 +41,7 @@ class Tetromino:
     def move(self, direction):
         move_directions = MOVE_DIRECTIONS[direction]
         new_block_pos = [block.pos + move_directions for block in self.blocks]
+        print(new_block_pos)
         is_collide = self.is_collide(new_block_pos)
 
         # print(move_directions)

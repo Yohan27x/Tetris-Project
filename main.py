@@ -57,6 +57,7 @@ class App:
             self.tetris.draw()
 
         pygame.display.update()
+        self.clock.tick(60)
 
     def check_events(self):
         self.anim_trigger = False

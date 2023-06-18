@@ -25,12 +25,11 @@ vec = pygame.math.Vector2
 SCREEN_SIZE = WIDTH, HEIGHT = 700, TILE_SIZE * 22
 FIELD_SIZE = FIELD_W, FIELD_H = int((WIDTH / TILE_SIZE)), int((HEIGHT / TILE_SIZE))
 
+
 INIT_POS_OFFSET = vec(FIELD_W//2 -1 , 0)
 
 
 ANIM_TIME_INTERVAL = 150
-
-
 
 TETROMINOES = {
     'T': [(0, 0), (-1, 0), (1, 0), (0, -1)],

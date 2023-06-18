@@ -61,12 +61,19 @@ class App:
 
     def check_events(self):
         self.anim_trigger = False
+
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or event.type == pygame.K_ESCAPE:
+            if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+
             elif event.type == pygame.KEYDOWN:
-                self.tetris.control(event)
+                if event.key == K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+                else:
+                    self.tetris.control(event)
+                    
             elif event.type == self.user_event:
                 self.anim_trigger = True
 

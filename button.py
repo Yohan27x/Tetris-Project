@@ -2,9 +2,6 @@ from settings import *
 
 pygame.mixer.init()
 
-pygame.display.set_caption('button')
-screen = pygame.display.set_mode((SCREEN_SIZE[0], SCREEN_SIZE[1]))
-
 mouse_on_button_fx = pygame.mixer.Sound('audio/mouse_on_button.wav')
 mouse_on_button_fx.set_volume(0.2)
 
@@ -27,7 +24,7 @@ class Button():
         self.image_mouse_on = pygame.transform.scale(button_list[1],
                                                      (int(self.width * scale), int(self.height * scale)))
 
-        self.new_mouse_img = pygame.image.load('sprites/mouse/new_mouse_button.png').convert_alpha()
+        self.new_mouse_img = pygame.image.load('sprites/mouse_cursor.png').convert_alpha()
         self.new_mouse_img = pygame.transform.scale(self.new_mouse_img, (int(self.new_mouse_img.get_width() * 4), int(self.new_mouse_img.get_height() * 4)))
 
         self.rect = self.image_unclick.get_rect()
@@ -109,8 +106,8 @@ exit_button_list = [image_exit_button_unclick,image_exit_button_mouse_on]
 # title_img = pygame.transform.scale(title_img,(title_img.get_width() * 5, title_img.get_height() * 5))
 
 
-play_button = Button(SCREEN_SIZE[0] // 2 - 100, SCREEN_SIZE[1] // 2 - 50, play_button_list, 5)
-exit_button = Button(SCREEN_SIZE[0] // 2 - 100, SCREEN_SIZE[1] // 2 + 70, exit_button_list, 5)
+play_button = Button(FIELD_RES[0] // 2 - 100, FIELD_RES[1] // 2 - 50, play_button_list, 5)
+exit_button = Button(FIELD_RES[0] // 2 - 100, FIELD_RES[1] // 2 + 70, exit_button_list, 5)
 # restart_button = Button(SCREEN_WIDTH // 2 - 157, SCREEN_HEIGHT // 2 - 85, restart_button_list, 5)
 
 

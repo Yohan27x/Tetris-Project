@@ -1,4 +1,4 @@
-import pygame, sys, os, random
+import pygame, sys, os, random, csv
 from pygame.locals import *
 from helperFunction import load_img
 
@@ -10,6 +10,7 @@ pygame.mixer.set_num_channels(64)
 pygame.display.set_caption('Tetris')
 
 font = pygame.font.Font("font/8-BIT WONDER.TTF", size=40)
+little_font = pygame.font.Font("font/8-BIT WONDER.TTF", size=24)
 os.environ['SDL_VIDEODRIVER'] = 'directx'
 flags = pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.SCALED
 
@@ -18,6 +19,22 @@ FPS = 60
 
 TILE_SIZE = 32
 
+    
+# with open('users.csv', 'w', newline='') as file:
+#     writer = csv.writer(file)
+    
+#     writer.writerow(["Oladele Damilola", "40"])
+#     writer.writerow(["Alina Hricko", "23"])
+#     writer.writerow(["Isabel Walter", "50"])
+
+
+# with open('users.csv', 'r', newline='') as file:
+#     reader = csv.reader(file)
+
+#     for row in reader:
+#         print(row)
+
+    
 
 
 FIELD_SIZE = FIELD_W, FIELD_H = 10, 20
@@ -30,7 +47,9 @@ screen = pygame.display.set_mode(WIN_RES, flags, vsync=True)
 
 vec = pygame.math.Vector2
 INIT_POS_OFFSET = vec(FIELD_W//2 -1 , 0)
-NEXT_POS_OFFSET = vec(FIELD_W * 1.3,  FIELD_H * 0.45)
+NEXT_POS_OFFSET = vec(FIELD_W * 1.3,  FIELD_H * 0.39)
+
+TIME_COUNTER = 4
 
 
 anim_time_interval = 150

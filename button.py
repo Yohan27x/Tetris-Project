@@ -41,7 +41,7 @@ class Button():
 
 
         display.blit(self.image, (self.rect.x, self.rect.y))
-        display.blit(self.new_mouse_img, (self.mouse_pos[0] - 30, self.mouse_pos[1] - 28))
+        # display.blit(self.new_mouse_img, (self.mouse_pos[0] - 30, self.mouse_pos[1] - 28))
 
         # pygame.draw.rect(display, color, self.rect)
         

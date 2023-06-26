@@ -48,16 +48,16 @@ class Block(pygame.sprite.Sprite):
         if 0 <= x < FIELD_W and y < FIELD_H and (y < 0 or not self.tetromino.tetris.field_array[y][x]):
             return False
         return True
-
-
+    
 
 class Tetromino:
     def __init__(self, tetris, current=True):
         self.tetris = tetris
         self.shape = random.choice(list(TETROMINOES.keys()))
-        self.color = random.choice(list(blocks.values()))
+        self.color = random.choice(list(blocks.keys()))
+        self.color_img = blocks[self.color]
         self.landing = False
-        self.blocks = [Block(self, pos, self.color) for pos in TETROMINOES[self.shape]]
+        self.blocks = [Block(self, pos, self.color_img) for pos in TETROMINOES[self.shape]]
         self.current = current
 
     def move(self, direction):
@@ -91,5 +91,15 @@ class Tetromino:
 
     def update(self):
         self.move(direction = "down")
+
+    def clear(self):
+        for block in self.blocks:
+            block.alive = False
+            block.is_alive()
+
+        del self
+
+
+    
 
 

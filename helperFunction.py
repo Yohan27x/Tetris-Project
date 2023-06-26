@@ -10,6 +10,6 @@ def load_img(path, img_size, scale = 1,colorkey=(255,255,255)):
     else:
         img = pygame.image.load(path).convert()
     img.set_colorkey(colorkey)
-    img = pygame.transform.scale(img, (img_size, img_size))
+    img = pygame.transform.scale(img, (img_size[0], img_size[1]))
 
     return img

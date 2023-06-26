@@ -1,19 +1,24 @@
 from settings import *
-from tetromino import Tetromino
+from tetromino import Tetromino, Block
+
 
 
 class Tetris:
-    def __init__(self,app):
+    def __init__(self,app, mode="normal"):
         self.app = app
+        self.mode = mode
         self.sprite_group = pygame.sprite.Group()
         self.field_array = self.get_field_array()
         self.tetromino = Tetromino(self)
         self.next_tetromino = Tetromino(self, current=False)
         self.speed_up = False
+        self.slow_down = False
 
         self.score = 0
         self.full_lines = 0
         self.point_per_lines = {0:0, 1:100, 2:300, 3:700, 4:2000}
+
+        self.current_player_text = font.render(str(self.app.user_name),  True, (255,255,255))
 
 
     def get_score(self):
@@ -26,7 +31,6 @@ class Tetris:
     
     def is_game_over(self):
         if self.tetromino.blocks[0].pos.y == INIT_POS_OFFSET[1]:
-            pygame.time.wait(300)
             return True
 
     
@@ -65,12 +69,26 @@ class Tetris:
             self.tetromino.rotate()
         elif(event.key == pygame.K_DOWN):
             self.speed_up = True
+        # elif(event.key == pygame.K_p):
+        #     for x in range(FIELD_W): 
+        #         for y in range(FIELD_H):
+        #             # print(self.field_array[y][x])
+        #             # print(type(self.field_array[y][x]))
+        #             if(isinstance(self.field_array[y][x], Block)):
+        #                 # print(self.field_array[y][x].tetromino.color)
+        #                 if self.field_array[y][x].tetromino.color == "red":
+        #                     self.field_array[y][x].tetromino.clear()
+        #                     self.field_array[y][x] = 0
+                            
+
 
     def check_tetromino_landing(self):
         # if the active tetromino land, then put in the array and create a new one that will then fall 
         if self.tetromino.landing:
             if self.is_game_over():
-                self.__init__(self.app)
+                self.app.choose_page("gameover")
+                # self.__init__(self.app)
+                pass
             else:
                 self.put_tetromino_block_in_array()
                 self.next_tetromino.current = True
@@ -98,10 +116,11 @@ class Tetris:
             self.tetromino.update()
             self.check_tetromino_landing()
             self.get_score()
-            print(self.score)
+            # print(self.score)
         self.sprite_group.update()
 
     def draw(self):
         # draw the grid and the sprites
         self.draw_grid()
         self.sprite_group.draw(self.app.screen)
+        self.app.screen.blit(self.current_player_text,(80,670))

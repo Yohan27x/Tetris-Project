@@ -12,22 +12,20 @@ click_on_button_fx.set_volume(0.6)
 # Class and functions
 
 class Button():
-    def __init__(self, x, y, button_list, scale):
+    def __init__(self, x, y, img, scale):
 
-        self.width = button_list[0].get_width()
-        self.height = button_list[0].get_height()
+        self.width = img.get_width()
+        self.height = img.get_height()
 
         self.mouse_pos = pygame.mouse.get_pos()
         pygame.mouse.set_visible(False)  # rendre invisible le curseur " de base "
 
-        self.image_unclick = pygame.transform.scale(button_list[0], (int(self.width * scale), int(self.height * scale)))
-        self.image_mouse_on = pygame.transform.scale(button_list[1],
-                                                     (int(self.width * scale), int(self.height * scale)))
+        self.image = pygame.transform.scale(img, (int(self.width * scale), int(self.height * scale)))
 
         self.new_mouse_img = pygame.image.load('sprites/mouse_cursor.png').convert_alpha()
         self.new_mouse_img = pygame.transform.scale(self.new_mouse_img, (int(self.new_mouse_img.get_width() * 4), int(self.new_mouse_img.get_height() * 4)))
 
-        self.rect = self.image_unclick.get_rect()
+        self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
@@ -35,46 +33,53 @@ class Button():
 
         self.play_sound = 1
 
+        self.is_active = False
+
     def draw(self, display):
+
+        self.is_active = True
+
 
         display.blit(self.image, (self.rect.x, self.rect.y))
         display.blit(self.new_mouse_img, (self.mouse_pos[0] - 30, self.mouse_pos[1] - 28))
+
+        # pygame.draw.rect(display, color, self.rect)
         
     def update(self):
-        action = False
-        mouse_collide = False
 
-        self.mouse_pos = pygame.mouse.get_pos()
-        # get mouse position
-        
+        if(self.is_active):
 
-        self.image = self.image_unclick
+            action = False
+            mouse_collide = False
 
-        if self.rect.collidepoint(self.mouse_pos):
-            if self.play_sound == 1:
-                mouse_on_button_fx.play()
-                self.play_sound = 0
+            self.mouse_pos = pygame.mouse.get_pos()
+            # get mouse position
+    
+            if self.rect.collidepoint(self.mouse_pos):
+                if self.play_sound == 1:
+                    # mouse_on_button_fx.play()
+                    self.play_sound = 0
 
-            self.image = self.image_mouse_on
-            mouse_collide = True
+                mouse_collide = True
 
-        else:
-            self.play_sound = 1
+            else:
+                self.play_sound = 1
 
 
-        if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False and mouse_collide == True:
-            click_on_button_fx.play()
-            action = True
-            self.clicked = True
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False and mouse_collide == True:
+                click_on_button_fx.play()
+                action = True
+                self.clicked = True
 
-        if pygame.mouse.get_pressed()[0] == 0:
-            self.clicked = False
+            if pygame.mouse.get_pressed()[0] == 0:
+                self.clicked = False
 
-        if self.clicked == True:
-            pass
+            if self.clicked == True:
+                pass
 
-        
-        return action
+            
+            self.is_active = False
+            return action
 
 
 
@@ -85,16 +90,10 @@ class Button():
 
 # load buttons
 #play
-image_play_button_unclick = pygame.image.load('sprites/Button/PlayButton/0.png').convert_alpha()
-image_play_button_mouse_on = pygame.image.load('sprites/Button/PlayButton/1.png').convert_alpha()
+# image_play_button = load_img('sprites/Button/play.png', [83,38])
 
-play_button_list = [image_play_button_unclick,image_play_button_mouse_on]
-
-#exit
-image_exit_button_unclick = pygame.image.load('sprites/Button/ExitButton/0.png').convert_alpha()
-image_exit_button_mouse_on = pygame.image.load('sprites/Button/ExitButton/1.png').convert_alpha()
-
-exit_button_list = [image_exit_button_unclick,image_exit_button_mouse_on]
+# #exit
+# image_exit_button = load_img('sprites/Button/quit.png', [62,30])
 
 
 # image_restart_button_unclick = pygame.image.load('Images/Buttons/Restart/0.png').convert_alpha()
@@ -106,8 +105,8 @@ exit_button_list = [image_exit_button_unclick,image_exit_button_mouse_on]
 # title_img = pygame.transform.scale(title_img,(title_img.get_width() * 5, title_img.get_height() * 5))
 
 
-play_button = Button(FIELD_RES[0] // 2 - 100, FIELD_RES[1] // 2 - 50, play_button_list, 5)
-exit_button = Button(FIELD_RES[0] // 2 - 100, FIELD_RES[1] // 2 + 70, exit_button_list, 5)
+# play_button = Button(FIELD_RES[0] // 2 - 20, FIELD_RES[1] // 2 - 30, image_play_button, 5)
+# exit_button = Button(FIELD_RES[0] // 2 - 20, FIELD_RES[1] // 2 + 170, image_exit_button, 5)
 # restart_button = Button(SCREEN_WIDTH // 2 - 157, SCREEN_HEIGHT // 2 - 85, restart_button_list, 5)
 
 

@@ -18,6 +18,12 @@ class Tetris:
         self.full_lines = 0
         self.point_per_lines = {0:0, 1:100, 2:300, 3:700, 4:2000}
 
+        self.first_speed = False
+        self.second_speed = False
+        self.third_speed = False
+
+        self.pause = False
+
         self.speed_change = True
 
 
@@ -29,6 +35,7 @@ class Tetris:
 
         if(win_point != 0):
             self.app.update_score_text()
+            full_line_fx.play()
 
         self.full_lines = 0
 
@@ -40,12 +47,11 @@ class Tetris:
     
     def is_game_over(self, check_on_landing=True):
 
-
         # print("self.app.counter : ", self.app.counter)
 
         if(self.mode == "time"):
             if(self.app.counter == 0):
-                print("in")
+                # print("in")
                 return True
             
         if(check_on_landing):
@@ -55,6 +61,7 @@ class Tetris:
         
     
     def check_full_lines(self):
+        trigger_powerup = False
         row = FIELD_H - 1
         for y in range(FIELD_H - 1, -1, -1):
             for x in range(FIELD_W):
@@ -68,7 +75,24 @@ class Tetris:
             else:
                 for x in range(FIELD_W):
                     self.field_array[row][x].alive = False
+                    if(self.field_array[row][x].tetromino.color == "black" and trigger_powerup == False):
+                        color = random.choice(list(blocks.keys()))
+                        while(color == "black"):
+                            color = random.choice(list(blocks.keys()))
+                        # print("color to delet : ", color)
+                        for xx in range(FIELD_W): 
+                            for yy in range(FIELD_H):
+                                if(isinstance(self.field_array[yy][xx], Block)):
+                                    # print(self.field_array[y][x].tetromino.color)
+                                    if self.field_array[yy][xx].tetromino.color == color:
+                                        self.field_array[yy][xx].tetromino.clear()
+                                        self.field_array[yy][xx] = 0
+
+                        trigger_powerup = True
+
+                    
                     self.field_array[row][x] = 0
+
 
                 self.full_lines += 1
     
@@ -100,26 +124,19 @@ class Tetris:
             elif(event.key == pygame.K_DOWN):
                 self.speed_up = True
             elif(event.key == pygame.K_p):
-                self.app.set_timer(-149)
-            # elif(event.key == pygame.K_p):
-            #     for x in range(FIELD_W): 
-            #         for y in range(FIELD_H):
-            #             # print(self.field_array[y][x])
-            #             # print(type(self.field_array[y][x]))
-            #             if(isinstance(self.field_array[y][x], Block)):
-            #                 # print(self.field_array[y][x].tetromino.color)
-            #                 if self.field_array[y][x].tetromino.color == "red":
-            #                     self.field_array[y][x].tetromino.clear()
-            #                     self.field_array[y][x] = 0
+                self.pause = not self.pause
+           
                                 
 
 
     def check_tetromino_landing(self):
         # if the active tetromino land, then put in the array and create a new one that will then fall 
         if self.tetromino.landing:
+            block_landing_fx.play()
             # print("enter game over check")
             # print(self.is_game_over())
             if self.is_game_over():
+                game_over_fx.play()
                 if(self.app.show_game_over == False):
                     self.close_tetris()
                     
@@ -140,49 +157,41 @@ class Tetris:
     
     def update(self):
         if(self.app.show_game_over == False):
+            
+            if(self.pause == False):
+                trigger = None
+                if self.speed_up == True:
+                    trigger = self.app.fast_anim_trigger
+                else:
+                    trigger = self.app.anim_trigger
 
-            trigger = None
-            if self.speed_up == True:
-                trigger = self.app.fast_anim_trigger
-            else:
-                trigger = self.app.anim_trigger
+                if trigger:
+                    self.check_full_lines()
+                    self.tetromino.update()
+                    self.check_tetromino_landing()
+                    self.get_score()
+                    # print(self.score)
 
-            if trigger:
-                self.check_full_lines()
-                self.tetromino.update()
-                self.check_tetromino_landing()
-                self.get_score()
-                # print(self.score)
+            
+                if(self.mode == "time"):
+                    if self.is_game_over(check_on_landing=False):
+                        game_over_fx.play()
+                        if(self.app.show_game_over == False):
+                            self.close_tetris()
+                    
 
-        
-            if(self.mode == "time"):
-                if self.is_game_over(check_on_landing=False):
-                    if(self.app.show_game_over == False):
-                        self.close_tetris()
-                        
-        
+        if(self.score >= 700 and self.first_speed == False):
+            self.app.set_tetronimo_speed(anim_time_interval - 180)
+            self.first_speed = True
 
+        if(self.score >= 1200 and self.second_speed == False):
+            self.app.set_tetronimo_speed(anim_time_interval - 220)
+            self.second_speed = True
 
-        
+        if(self.score >+ 2000 and self.third_speed == False):
+            self.app.set_tetronimo_speed(anim_time_interval - 260)
+            self.third_speed = True
 
-
-        # if((self.score == 300 or self.score == 1000 or self.score == 2000) and self.speed_change == False):
-        #     self.speed_change = True
-
-        # if(self.slow_down == False):
-        #     if(self.speed_change):
-        #         if(self.score == 300):
-        #             self.app.set_timer(anim_time_interval - 200)
-
-        #         elif(self.score == 1000):
-        #             self.app.set_timer(anim_time_interval - 250)
-
-        #         elif(self.score == 2000):
-        #             self.app.set_timer(anim_time_interval - 299)
-
-
-        #         self.speed_change = not self.speed_change
-        
         
         self.sprite_group.update()
 

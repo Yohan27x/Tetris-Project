@@ -9,9 +9,10 @@
 # bouton restart OK
 # user : input text + stocker user name dans CSV OK
 
-# La vitesse de chute des blocs peut augmenter progressivement à mesure que le joueur marque des points ou atteint certains objectifs.
-# mode powerup : ajouter des powerups
+# La vitesse de chute des blocs peut augmenter progressivement à mesure que le joueur marque des points ou atteint certains objectifs. OK
+# mode powerup : ajouter des powerups OK
 # commenter le code
+# faire les boutons
 # ajouter les sons + fx 
 # fx : line completé 
 
@@ -33,15 +34,15 @@ class App:
         self.clock = pygame.time.Clock()
         self.set_tetronimo_speed()
         
-        self.play_button = Button(FIELD_RES[0] // 2 - 35, FIELD_RES[1] // 2 - 30, load_img('sprites/Button/play.png', [62,30]), 5)
-        self.exit_button = Button(FIELD_RES[0] // 2 - 35, FIELD_RES[1] // 2 + 170, load_img('sprites/Button/quit.png', [62,30]), 5)
+        self.play_button = Button(FIELD_RES[0] // 2 + 40, FIELD_RES[1] // 2 - 70, load_img('sprites/Button/play.png', [30,30]), 5)
+        self.exit_button = Button(FIELD_RES[0] // 2 + 40, FIELD_RES[1] // 2 + 110, load_img('sprites/Button/quit.png', [30,30]), 5)
 
         self.next_button = Button(FIELD_RES[0] // 2 + 220, FIELD_RES[1] // 2 + 300, load_img('sprites/Button/next.png', [30,30]), 5)
 
-        self.choose_mode_button = Button(FIELD_RES[0] // 2 + 40, FIELD_RES[1] // 2 - 120, load_img('sprites/Button/choosemode.png', [30,30]), 5)
+        self.choose_mode_button = Button(FIELD_RES[0] // 2 + 40, FIELD_RES[1] // 2 - 140, load_img('sprites/Button/choosemode.png', [30,30]), 5)
         self.login_button = Button(FIELD_RES[0] // 2 - 140, FIELD_RES[1] // 2 + 290, load_img('sprites/Button/login.png', [30,30]), 5)
-        self.score_button = Button(FIELD_RES[0] // 2 + 40, FIELD_RES[1] // 2 + 80, load_img('sprites/Button/score.png', [30,30]), 5)
-        self.back_button = Button(FIELD_RES[0] // 2 - 130, FIELD_RES[1] // 2 + 320, load_img('sprites/Button/back.png', [30,30]), 5)
+        self.score_button = Button(FIELD_RES[0] // 2 + 40, FIELD_RES[1] // 2 + 55, load_img('sprites/Button/score.png', [30,30]), 5)
+        self.back_button = Button(FIELD_RES[0] // 2 - 140, FIELD_RES[1] // 2 + 290, load_img('sprites/Button/back.png', [30,30]), 5)
 
 
         self.normal_mode_button = Button(FIELD_RES[0] // 2 + 50, FIELD_RES[1] // 2 + - 240, load_img('sprites/Button/normal.png', [30,30]), 5)
@@ -49,9 +50,9 @@ class App:
         self.powerup_mode_button = Button(FIELD_RES[0] // 2 + 50, FIELD_RES[1] // 2 + 160, load_img('sprites/Button/powerup.png', [30,30]), 5)
 
 
-        self.restart_button = Button(130,350, load_img('sprites/Button/restart.png', [62,30]), 5)
-        self.back_menu_button = Button(200,510, load_img('sprites/Button/backmenu.png', [30,30]), 5)
-        self.slowdown_button = Button(370,450, load_img('sprites/Button/fill.png', [30,30]), 5)
+        self.restart_button = Button(210,350, load_img('sprites/Button/restart.png', [30,30]), 5)
+        self.back_menu_button = Button(210,510, load_img('sprites/Button/backmenu.png', [30,30]), 5)
+        self.slowdown_button = Button(370,450, load_img('sprites/Button/slowdown.png', [30,30]), 5)
 
         # ------------------------ TEXT ---------------------------------------------
 
@@ -204,14 +205,17 @@ class App:
             self.quit_game = True
 
         if(press_next_button):
-            self.user_name_text = little_font.render(str(self.user_name), True, (255,255,255))
-            self.choose_page("menu")
+            if(len(self.user_name) != 0):
+                self.user_name_text = little_font.render(str(self.user_name), True, (255,255,255))
+                self.choose_page("menu")
 
         if(press_choose_mode_button):
             self.choose_page("choose_mode")
             pygame.time.wait(100)
 
         if(press_login_button):
+            self.user_name = ""
+            self.user_name_text = little_font.render(str(self.user_name), True, (255,255,255))
             self.choose_page("register")
             pygame.time.wait(70)
 
@@ -224,7 +228,7 @@ class App:
             pygame.time.wait(100)
 
         if(press_normal_mode_button):
-            print("normal")
+            # print("normal")
             self.tetris = Tetris(self)
             self.current_score_text = font.render((str(self.tetris.score)),  True, (255,255,255))
             self.update_score_text()
@@ -232,7 +236,7 @@ class App:
 
         if(press_time_mode_button):
             self.tetris = Tetris(self, mode="time")
-            print("choose time")
+            # print("choose time")
             self.counter = TIME_COUNTER
             self.counter_max = self.counter
             self.timer_text = font.render(str(self.counter), True, (255, 255, 255))
@@ -242,7 +246,7 @@ class App:
             self.set_timer_count_down()
 
         if(press_powerup_mode_button):
-            print("powerup")
+            # print("powerup")
             self.tetris = Tetris(self, mode="powerup")
             self.current_score_text = font.render((str(self.tetris.score)),  True, (255,255,255))
             self.update_score_text()
@@ -261,6 +265,7 @@ class App:
         if(press_restart_button):
             # create a new tetris with the same attribute of the previous one
             new_tetris = Tetris(self, mode=str(self.tetris.mode))
+            restart_fx.play()
             self.tetris = new_tetris
             self.counter = TIME_COUNTER
             self.update_score_text()
@@ -347,7 +352,10 @@ class App:
         self.screen.blit(self.current_score_text,(395,20))
         self.screen.blit(self.user_name_text, (80,670))
         if(self.tetris.mode == "time"):
-            self.screen.blit(self.timer_text, (100,200))
+            self.screen.blit(self.timer_text, (410,655))
+        if(self.tetris.pause == True):
+            self.screen.blit(self.shade_surface, (0,0))
+            self.screen.blit(font.render(str("Pause"),  True, (255,255,255)), (180,280))
         if(self.show_game_over):
             self.screen.blit(self.shade_surface, (0,0))
             self.screen.blit(self.game_over_text, (127,200))
@@ -431,6 +439,7 @@ class App:
                 if event.type == self.timer_event:
                     if(self.counter != 0):
                         self.counter -= 1
+                        timer_fx.play()
                     self.timer_text = font.render(str(self.counter), True, (255, 255, 255))
 
 

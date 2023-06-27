@@ -53,9 +53,19 @@ class Block(pygame.sprite.Sprite):
 class Tetromino:
     def __init__(self, tetris, current=True):
         self.tetris = tetris
-        # self.shape = random.choice(list(TETROMINOES.keys()))
-        self.shape = 'O'
+        self.shape = random.choice(list(TETROMINOES.keys()))
+        # self.shape = 'O'
+
+
         self.color = random.choice(list(blocks.keys()))
+        while(self.color == "black"):
+            self.color = random.choice(list(blocks.keys()))
+
+        if(tetris.mode == "powerup"):
+            power_up_rand = random.randint(1,12)
+            # print(power_up_rand)
+            if(power_up_rand == 1):
+                self.color = "black"
         self.color_img = blocks[self.color]
         self.landing = False
         self.blocks = [Block(self, pos, self.color_img) for pos in TETROMINOES[self.shape]]

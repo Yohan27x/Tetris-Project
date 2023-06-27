@@ -334,7 +334,7 @@ class App:
         self.screen.blit(self.user_name_text,(425,700))
 
         x = 40
-        y = 120
+        y = 110
         for i,score in enumerate(self.best_score):
             # print("score[2] ; ", score[2])
             scorebox = ScoreBox(self.screen, score[0], score[1], score[2])

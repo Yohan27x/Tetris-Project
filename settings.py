@@ -34,7 +34,7 @@ vec = pygame.math.Vector2
 INIT_POS_OFFSET = vec(FIELD_W//2 -1 , 0)
 NEXT_POS_OFFSET = vec(FIELD_W * 1.3,  FIELD_H * 0.39)
 
-TIME_COUNTER = 15
+TIME_COUNTER = 60
 
 
 anim_time_interval = 150
